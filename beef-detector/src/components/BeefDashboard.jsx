@@ -3,6 +3,7 @@ import { beefData, beefHistory } from '../data/beefData'
 import BeefCard from './BeefCard'
 import NewBeefAlert from './NewBeefAlert'
 import BeefHistorySidebar from './BeefHistorySidebar'
+import NewsTicker from './NewsTicker'
 
 export default function BeefDashboard() {
   const [beefs] = useState(beefData)
@@ -31,7 +32,7 @@ export default function BeefDashboard() {
         </p>
       </header>
 
-      <main className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-8 lg:flex-row">
+      <main className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-8 pb-16 lg:flex-row">
         <section className="flex-1">
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {beefs.map((beef) => (
@@ -42,6 +43,8 @@ export default function BeefDashboard() {
 
         <BeefHistorySidebar history={history} />
       </main>
+
+      <NewsTicker />
     </div>
   )
 }
