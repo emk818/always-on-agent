@@ -4,6 +4,7 @@ import BeefCard from './BeefCard'
 import NewBeefAlert from './NewBeefAlert'
 import BeefHistorySidebar from './BeefHistorySidebar'
 import NewsTicker from './NewsTicker'
+import BeefOMeter from './BeefOMeter'
 
 export default function BeefDashboard() {
   const [beefs] = useState(beefData)
@@ -31,6 +32,8 @@ export default function BeefDashboard() {
           Monitoring workplace harmony since 2024
         </p>
       </header>
+
+      <BeefOMeter />
 
       <main className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-8 pb-16 lg:flex-row">
         <section className="flex-1">
