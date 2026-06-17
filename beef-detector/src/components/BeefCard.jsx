@@ -7,13 +7,24 @@ function formatTimestamp(iso) {
   })
 }
 
-export default function BeefCard({ beef }) {
+export default function BeefCard({ beef, onSelectCharacter }) {
   return (
     <article className="flex flex-col gap-4 rounded-xl border border-white/10 bg-zinc-900/70 p-5 shadow-lg shadow-black/40 transition-colors hover:border-red-500/40">
       <div className="flex items-start justify-between gap-3">
         <h3 className="font-display text-2xl tracking-wide text-white">
-          {beef.parties[0]}{' '}
-          <span className="text-red-500">vs</span> {beef.parties[1]}
+          <button
+            onClick={() => onSelectCharacter(beef.parties[0])}
+            className="underline-offset-4 transition-colors hover:text-red-400 hover:underline"
+          >
+            {beef.parties[0]}
+          </button>{' '}
+          <span className="text-red-500">vs</span>{' '}
+          <button
+            onClick={() => onSelectCharacter(beef.parties[1])}
+            className="underline-offset-4 transition-colors hover:text-red-400 hover:underline"
+          >
+            {beef.parties[1]}
+          </button>
         </h3>
         <TemperatureBadge temperature={beef.temperature} />
       </div>

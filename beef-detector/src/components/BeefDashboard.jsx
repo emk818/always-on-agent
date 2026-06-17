@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react'
 import { beefData, beefHistory } from '../data/beefData'
+import { characterData } from '../data/characterData'
 import BeefCard from './BeefCard'
 import NewBeefAlert from './NewBeefAlert'
 import BeefHistorySidebar from './BeefHistorySidebar'
 import NewsTicker from './NewsTicker'
 import BeefOMeter from './BeefOMeter'
+import CharacterProfileCard from './CharacterProfileCard'
 
 export default function BeefDashboard() {
   const [beefs] = useState(beefData)
   const [history] = useState(beefHistory)
   const [activeAlert, setActiveAlert] = useState(null)
+  const [selectedCharacter, setSelectedCharacter] = useState(null)
 
   // Demo trigger: simulate a live "new beef" alert a few seconds after load.
   // Person 5: replace with a real push/poll event from the API.
@@ -23,6 +26,12 @@ export default function BeefDashboard() {
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-zinc-100">
       <NewBeefAlert beef={activeAlert} onDismiss={() => setActiveAlert(null)} />
+
+      <CharacterProfileCard
+        name={selectedCharacter}
+        profile={selectedCharacter ? characterData[selectedCharacter] : null}
+        onClose={() => setSelectedCharacter(null)}
+      />
 
       <header className="border-b border-white/10 bg-black/40 px-6 py-8 text-center">
         <h1 className="font-display animate-flicker text-5xl tracking-widest text-red-500 sm:text-6xl">
@@ -39,7 +48,7 @@ export default function BeefDashboard() {
         <section className="flex-1">
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {beefs.map((beef) => (
-              <BeefCard key={beef.id} beef={beef} />
+              <BeefCard key={beef.id} beef={beef} onSelectCharacter={setSelectedCharacter} />
             ))}
           </div>
         </section>
