@@ -30,38 +30,56 @@ export default function BeefIntro({ onEnter }) {
   const [fading, setFading] = useState(false)
   const playerRef = useRef(null)
   const timersRef = useRef([])
+  const clipWatcherRef = useRef(null)
+  const apiPromiseRef = useRef(null)
+  const hasStartedPlaybackRef = useRef(false)
 
   useEffect(() => {
+    // Kick off the YouTube IFrame API load as soon as the intro mounts,
+    // so it's already warm by the time the user clicks (the click itself
+    // still has to happen for autoplay-with-sound to be allowed).
+    apiPromiseRef.current = loadYouTubeApi()
+
     return () => {
       timersRef.current.forEach(clearTimeout)
+      clearInterval(clipWatcherRef.current)
       playerRef.current?.destroy?.()
     }
   }, [])
 
+  const beginCountdown = () => {
+    if (hasStartedPlaybackRef.current) return
+    hasStartedPlaybackRef.current = true
+
+    const fadeTimer = setTimeout(() => setFading(true), FADE_AT_MS)
+    const handoffTimer = setTimeout(() => onEnter(), HANDOFF_AT_MS)
+    timersRef.current.push(fadeTimer, handoffTimer)
+  }
+
   const handleEnter = async () => {
     setStarted(true)
 
-    const YT = await loadYouTubeApi()
+    const YT = await apiPromiseRef.current
     playerRef.current = new YT.Player('yt-player', {
       videoId: VIDEO_ID,
       playerVars: { start: CLIP_START, autoplay: 1 },
       events: {
         onReady: (e) => e.target.playVideo(),
+        onStateChange: (e) => {
+          if (e.data === window.YT.PlayerState.PLAYING) {
+            beginCountdown()
+          }
+        },
       },
     })
 
-    const clipWatcher = setInterval(() => {
+    clipWatcherRef.current = setInterval(() => {
       const player = playerRef.current
       if (player?.getCurrentTime && player.getCurrentTime() >= CLIP_END) {
         player.stopVideo()
-        clearInterval(clipWatcher)
+        clearInterval(clipWatcherRef.current)
       }
     }, 500)
-
-    const fadeTimer = setTimeout(() => setFading(true), FADE_AT_MS)
-    const handoffTimer = setTimeout(() => onEnter(), HANDOFF_AT_MS)
-
-    timersRef.current.push(fadeTimer, handoffTimer)
   }
 
   return (
