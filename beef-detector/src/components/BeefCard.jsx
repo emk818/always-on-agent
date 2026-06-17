@@ -22,9 +22,23 @@ export default function BeefCard({ beef }) {
         {beef.originStory}
       </p>
 
-      <p className="font-serif-dramatic text-lg italic text-zinc-200">
-        "{beef.dissTrackTitle}"
-      </p>
+      <div className="rounded-lg border border-white/5 bg-black/30 p-3">
+        <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+          Predicted Diss Track
+        </p>
+        <a
+          href={beef.dissTrack.youtubeUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-1 flex items-center gap-2 font-serif-dramatic text-lg italic text-zinc-200 transition-colors hover:text-red-400"
+        >
+          <span aria-hidden="true">▶️</span>
+          <span>
+            "{beef.dissTrack.title}" — {beef.dissTrack.artist}
+          </span>
+        </a>
+        <p className="mt-2 text-sm text-zinc-400">{beef.dissTrack.relevance}</p>
+      </div>
 
       <div className="rounded-lg border border-white/5 bg-black/30 p-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
